@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem is designed to assist the coding student access helpful coding guides from StackOverflow, GitHub, and YouTube.  
 
 ## Development
 
