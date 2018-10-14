@@ -2,6 +2,7 @@ require_relative "./codehelper/version"
 require_relative "./codehelper/cli"
 require 'nokogiri'
 require 'open-uri'
+require 'pry'
 
 module Codehelper 
   attr_accessor :input
@@ -25,8 +26,8 @@ def self.call
       puts "What would you like to search?"
     end 
     @input = input
-    self.search_urls
-    self.scrape_youtube
+    search_urls
+    scrape_youtube
   end 
   
   def self.search_urls
@@ -34,10 +35,9 @@ def self.call
     @youtube_query = @youtube_basepath + search_param 
     @stackoverflow_query = @stackoverflow_basepath + search_param 
     @github_query = @youtube_basepath + search_param 
-
-   # puts @youtube_query
-    #puts @stackoverflow_query
-    #puts @github_query
+    puts @youtube_query
+    puts @stackoverflow_query
+    puts @github_query
   end 
 
   def self.scrape_youtube
@@ -47,7 +47,7 @@ def self.call
       node_2.each do |node|
         @listing[:date_posted] = node.css('ul').children.css('li').first.text
       end
-    node_1 = page.css('.yt-lockup-title')
+   node_1 = page.css('.yt-lockup-title')
       node_1.each do |node|  
         @listing[:title] = node.css('a').attribute('title').value
         video_link = node.css('a').attribute('href').value
@@ -57,6 +57,7 @@ def self.call
       node_3.each do |node|
         @listing[:description] = node.children.inner_text 
       end 
+      puts @listing
   end 
   
   
