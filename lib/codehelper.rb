@@ -11,8 +11,13 @@ module Codehelper
   @stackoverflow_basepath = "https://stackoverflow.com/search?q="
   @github_basepath = "https://github.com/search?q="
 
-
-def self.call 
+  @@all = []
+  
+  def self.all
+    puts @@all
+  end 
+  
+  def self.call 
     puts "Not sure what to do next? Access online resources to assist with your code."
     search
   end 
@@ -43,22 +48,28 @@ def self.call
   def self.scrape_youtube
     @listing = {}
     page = Nokogiri::HTML(open(@youtube_query))
-    node_2 = page.css('.yt-lockup-meta')
-      node_2.each do |node|
-        @listing[:date_posted] = node.css('ul').children.css('li').first.text
-      end
-   node_1 = page.css('.yt-lockup-title')
-      node_1.each do |node|  
-        @listing[:title] = node.css('a').attribute('title').value
-        video_link = node.css('a').attribute('href').value
-        @listing[:link] = "https://www.youtube.com" + video_link
-      end
-    node_3 = page.css('.yt-lockup-description')
-      node_3.each do |node|
-        @listing[:description] = node.children.inner_text 
-      end 
-      puts @listing
+      i = 0 
+      while i <= 5
+      node_2 = page.css('.yt-lockup-meta')
+        node_2.each do |node|
+          @listing[:date_posted] = node.css('ul').children.css('li').first.text
+        end
+      node_1 = page.css('.yt-lockup-title')
+        node_1.each do |node|  
+          @listing[:title] = node.css('a').attribute('title').value
+          video_link = node.css('a').attribute('href').value
+          @listing[:link] = "https://www.youtube.com" + video_link
+       end
+      node_3 = page.css('.yt-lockup-description')
+        node_3.each do |node|
+          @listing[:description] = node.children.inner_text 
+       end 
+      @@all << @listing
+      i += 1
+    end
+      puts all
   end 
+    
   
   
   end
