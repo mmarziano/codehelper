@@ -32,7 +32,9 @@ module Codehelper
     end 
     @input = input
     search_urls
+    scrape_youtube
     scrape_stackoverflow
+    all
   end 
   
   def self.search_urls
@@ -67,7 +69,6 @@ module Codehelper
       @@all << @ytlisting
       i += 1
     end
-      puts all
   end 
     
   def self.scrape_stackoverflow
@@ -91,7 +92,7 @@ module Codehelper
        node_4.each do |node|
          @stklisting[:status] = node.children.text.split.join(" ")
         end 
-    puts @stklisting
+      @@all << @stklisting
   end 
   
   end
