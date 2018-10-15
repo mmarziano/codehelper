@@ -9,7 +9,6 @@ module Codehelper
 
   @youtube_basepath = "https://www.youtube.com/results?search_query="
   @stackoverflow_basepath = "https://stackoverflow.com/search?q="
-  @github_basepath = "https://github.com/search?q="
 
   @@all = []
   
@@ -41,10 +40,8 @@ module Codehelper
     search_param = @input.split(' ').join('+')
     @youtube_query = @youtube_basepath + search_param 
     @stackoverflow_query = @stackoverflow_basepath + search_param 
-    @github_query = @youtube_basepath + search_param 
     puts @youtube_query
     puts @stackoverflow_query
-    puts @github_query
   end 
 
   def self.scrape_youtube
@@ -81,7 +78,8 @@ module Codehelper
     node_2 = page.css('.result-link h3')
       node_2.each do |node|
         @stklisting[:title] = node.css('a').attribute('title').value
-        video_link = node.css('a').attribute('href').value
+        link = node.css('a').attribute('href').value
+        video_link = link.gsub(URI.regexp, '<a href="\0">\0</a>')
         @stklisting[:link] = "https://stackoverflow.com" + video_link
       end
      node_3 = page.css('.excerpt')
@@ -93,6 +91,7 @@ module Codehelper
          @stklisting[:status] = node.children.text.split.join(" ")
         end 
       @@all << @stklisting
+
   end 
-  
+ 
   end
