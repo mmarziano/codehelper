@@ -32,7 +32,7 @@ module Codehelper
     end 
     @input = input
     search_urls
-    scrape_youtube
+    scrape_stackoverflow
   end 
   
   def self.search_urls
@@ -46,30 +46,52 @@ module Codehelper
   end 
 
   def self.scrape_youtube
-    @listing = {}
+    @ytlisting = {}
     page = Nokogiri::HTML(open(@youtube_query))
       i = 0 
       while i <= 5
       node_2 = page.css('.yt-lockup-meta')
         node_2.each do |node|
-          @listing[:date_posted] = node.css('ul').children.css('li').first.text
+          @ytlisting[:date_posted] = node.css('ul').children.css('li').first.text
         end
       node_1 = page.css('.yt-lockup-title')
         node_1.each do |node|  
-          @listing[:title] = node.css('a').attribute('title').value
+          @ytlisting[:title] = node.css('a').attribute('title').value
           video_link = node.css('a').attribute('href').value
-          @listing[:link] = "https://www.youtube.com" + video_link
+          @ytlisting[:link] = "https://www.youtube.com" + video_link
        end
       node_3 = page.css('.yt-lockup-description')
         node_3.each do |node|
-          @listing[:description] = node.children.inner_text 
+          @ytlisting[:description] = node.children.inner_text 
        end 
-      @@all << @listing
+      @@all << @ytlisting
       i += 1
     end
       puts all
   end 
     
-  
+  def self.scrape_stackoverflow
+    @stklisting = {}
+    page = Nokogiri::HTML(open(@stackoverflow_query))
+    node_1 = page.css('.votes')
+     node_1.each do |node|
+        @stklisting[:votes] = node.children.text.split.join(" ")
+      end
+    node_2 = page.css('.result-link h3')
+      node_2.each do |node|
+        @stklisting[:title] = node.css('a').attribute('title').value
+        video_link = node.css('a').attribute('href').value
+        @stklisting[:link] = "https://stackoverflow.com" + video_link
+      end
+     node_3 = page.css('.excerpt')
+       node_3.each do |node|
+          @stklisting[:excerpt] = node.children.inner_text.split.join(" ")
+        end 
+    node_4 = page.css('div.status')
+       node_4.each do |node|
+         @stklisting[:status] = node.children.text.split.join(" ")
+        end 
+    puts @stklisting
+  end 
   
   end
